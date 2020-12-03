@@ -1,0 +1,12 @@
+# Python
+.venv
+*.pyc
+__pycache__/
+.mypy_cache/
+*.egg-info/
+
+# Build folder
+dist/
+
+# Editor
+.vscode/
