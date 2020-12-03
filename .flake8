@@ -1,0 +1,14 @@
+[flake8]
+ignore = D205,D413
+# exclude = __init__.py
+
+# flake8-quotes
+inline-quotes = single
+multiline-quotes = double
+
+# flake8-import-order
+# application-import-names =
+import-order-style = google
+
+# flake8-coding
+no-accept-encodings = True
