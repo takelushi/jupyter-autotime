@@ -3,7 +3,7 @@ name = "jupyter-autotime"
 packages = [
     {include = "autotime"}
 ]
-version = "1.0.2"
+version = "1.0.3"
 description = "Display elapsed time on Jupyter."
 authors = ["Takeru Saito <takelushi@gmail.com>"]
 readme = "README.md"

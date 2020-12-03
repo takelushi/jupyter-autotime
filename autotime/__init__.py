@@ -3,9 +3,10 @@
 import threading
 import time
 
-import IPython
 from IPython.core.magics.execution import _format_time
 from IPython.display import clear_output, display, HTML
+
+LAB = False
 
 
 class Timer():
@@ -52,8 +53,9 @@ class Timer():
 
     def start(self):
         """Start timer."""
+        print(LAB)
         self.output = display(display_id=True)
-        if IPython.__version__.split('.')[0] == '6':
+        if not LAB:
             self.output.display(HTML('<pre></pre>'))
         self.worker = threading.Thread(target=self._run_loop)
         self.worker.start()
