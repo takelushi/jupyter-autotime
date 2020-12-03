@@ -3,6 +3,7 @@
 import threading
 import time
 
+import IPython
 from IPython.core.magics.execution import _format_time
 from IPython.display import clear_output, display, HTML
 
@@ -52,7 +53,8 @@ class Timer():
     def start(self):
         """Start timer."""
         self.output = display(display_id=True)
-        self.output.display(HTML('<pre></pre>'))
+        if IPython.__version__.split('.')[0] == '6':
+            self.output.display(HTML('<pre></pre>'))
         self.worker = threading.Thread(target=self._run_loop)
         self.worker.start()
 
