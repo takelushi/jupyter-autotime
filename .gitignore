@@ -10,3 +10,6 @@ dist/
 
 # Editor
 .vscode/
+
+# Jupyter
+*.ipynb

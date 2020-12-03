@@ -53,7 +53,6 @@ class Timer():
 
     def start(self):
         """Start timer."""
-        print(LAB)
         self.output = display(display_id=True)
         if not LAB:
             self.output.display(HTML('<pre></pre>'))

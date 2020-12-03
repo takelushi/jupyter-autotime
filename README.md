@@ -22,7 +22,7 @@ Display elapsed time on Jupyter.
 1. Enable autotime
 
    ```python
-   # JupyterLab required
+   # Only JupyterLab
    import autotime
    autotime.LAB = True
    ```
