@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "jupyter-autotime"
 packages = [
-    {include = "src/autotime"}
+    {include = "autotime"}
 ]
 version = "0.1.0"
 description = "Display elapsed time on Jupyter."

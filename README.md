@@ -31,7 +31,7 @@ Display elapsed time on Jupyter.
 # Reload.
 %reloadext autotime
 
-# Disable
+# Disable.
 %unloadext autotime
 ```
 
