@@ -1,10 +1,59 @@
 """jupyter-autotime."""
 
+import math
 import threading
 import time
 
-from IPython.core.magics.execution import _format_time
 from IPython.display import clear_output, display, HTML
+
+UNITS = {
+    'nano': 'ns',  # nanosecond
+    'micro': 'µs',  # microsecond
+    'ms': 'ms',  # millisecond
+    'sec': 's',  # second
+    'min': 'min',  # minute
+    'hr': 'h',  # hour
+    'd': 'd',  # day
+}
+
+
+def format_time(timespan):
+    """Format elapsed time.
+
+    Args:
+        timespan (float): Time span.
+
+    Returns:
+        str: Formatted string.
+    """
+    if timespan >= 60.0:
+        parts = [(UNITS['d'], 60 * 60 * 24), (UNITS['hr'], 60 * 60),
+                 (UNITS['min'], 60), (UNITS['sec'], 1)]
+        time = []
+        leftover = timespan
+        for suffix, length in parts:
+            value = int(leftover / length)
+            if value > 0:
+                leftover = leftover % length
+                time.append(u'%s %s' % (str(value), suffix))
+            if leftover < 1:
+                break
+        return ' '.join(time)
+
+    units = [
+        UNITS['sec'],
+        UNITS['ms'],
+        UNITS['micro'],
+        UNITS['nano'],
+    ]
+
+    scaling = [1, 1e3, 1e6, 1e9]
+
+    if timespan > 0.0:
+        order = min(-int(math.floor(math.log10(timespan)) // 3), 3)
+    else:
+        order = 3
+    return '%.*g %s' % (3, timespan * scaling[order], units[order])
 
 
 class Timer():
@@ -29,7 +78,7 @@ class Timer():
         Returns:
             str: Formatted time delta.
         """
-        return _format_time(time.monotonic() - self.start_time)
+        return format_time(time.monotonic() - self.start_time)
 
     def _update_output(self, text):
         """Update output.
