@@ -6,8 +6,6 @@ import time
 from IPython.core.magics.execution import _format_time
 from IPython.display import clear_output, display, HTML
 
-LAB = False
-
 
 class Timer():
     """Timer."""
