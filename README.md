@@ -37,12 +37,15 @@ Display elapsed time on Jupyter.
 
 ## Customization
 
-* Customize timespan format.
+* First, import the module to hack `autotime`.
 
    ```python
    import autotime
+   ```
 
+* Customize timespan format.
 
+   ```python
    def my_format_timepan(timespan: float) -> str):
       """My custom timespan format."""
       # e.g. '12 sec'
@@ -50,23 +53,32 @@ Display elapsed time on Jupyter.
    autotime.format_timespan = my_format_timepan
    ```
 
+* Customize time format.
+
+   ```python
+   # e.g. '2020/12/10 16:15:11'
+   autotime.TIME_FORMAT = '%Y/%m/%d %H:%M:%S'
+   ```
+
 * Customize output format.
 
    ```python
-   import autotime
-
    # e.g. '[RUNNING] 3.09 s (2020-12-10T15:58:35)'
    autotime.RUNNING_FORMAT = '[RUNNING] {timespan} ({start})'
    # e.g. '[FINISH] 4.02 s (2020-12-10T15:59:54~2020-12-10T15:59:58)'
    autotime.FINISHED_FORMAT = '[FINISH] {timespan} ({start}~{end})'
    ```
 
+* Customize units.
+
+   ```python
+   # e.g. 5 分 7 秒
+   autotime.set_units(sec='秒', min='分', hr='時間', d='日')
+   ```
+
 * Customize output with method.
 
    ```python
-   import time
-
-
    def my_format_output(timespan: float,
                         start_time: time.struct_time,
                         end_time: float = None,
@@ -82,6 +94,12 @@ Display elapsed time on Jupyter.
 
    autotime.format_output = my_format_output
    ```
+
+   * You can access below objects on custom format_output.
+      * `autotime.UNITS (dict)`
+      * `autotime.format_time (method)`
+      * `autotime.RUNNING_FORMAT (str)`
+      * `autotime.FINISHED_FORMAT (str)`
 
 ## Development
 

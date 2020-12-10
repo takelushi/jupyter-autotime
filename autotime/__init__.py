@@ -15,10 +15,29 @@ UNITS = {
     'hr': 'h',  # hour
     'd': 'd',  # day
 }
-
 TIME_FORMAT = '%Y-%m-%dT%H:%M:%S'
 RUNNING_FORMAT = '⌛ {timespan} ({start})'
 FINISHED_FORMAT = '✔️ {timespan} ({start}/{end})'
+
+
+def set_units(**units):
+    """Set units.
+
+    Args:
+        d (str, optional): Day.
+        hr (str, optional): Hour.
+        min (str, optional): Minute.
+        sec (str, optional): Second.
+        ms (str, optional): Millisecond.
+        micro (str, optional): Microsecond.
+        nano (str, optional): Nanosecond.
+    """
+    for k, v in units.items():
+        if k not in UNITS.keys():
+            raise ValueError(f'Unknown unit: "{k}"')
+        if not isinstance(v, str):
+            raise ValueError(f'Unit must be string. "{k}" is {type(v)}.')
+        UNITS[k] = v
 
 
 def format_timespan(timespan):
