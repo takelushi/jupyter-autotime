@@ -95,9 +95,10 @@ Display elapsed time on Jupyter.
    autotime.format_output = my_format_output
    ```
 
-   * You can access below objects on custom format_output.
+   * You can access below objects on custom `format_output`.
       * `autotime.UNITS (dict)`
       * `autotime.format_time (method)`
+      * `autotime.TIME_FORMAT (str)`
       * `autotime.RUNNING_FORMAT (str)`
       * `autotime.FINISHED_FORMAT (str)`
 
