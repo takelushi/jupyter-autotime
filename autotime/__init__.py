@@ -16,9 +16,13 @@ UNITS = {
     'd': 'd',  # day
 }
 
+TIME_FORMAT = '%Y-%m-%dT%H:%M:%S'
+RUNNING_FORMAT = '⌛ {timespan} ({start})'
+FINISHED_FORMAT = '✔️ {timespan} ({start}/{end})'
 
-def format_time(timespan):
-    """Format elapsed time.
+
+def format_timespan(timespan):
+    """Format time span.
 
     Args:
         timespan (float): Time span.
@@ -40,13 +44,7 @@ def format_time(timespan):
                 break
         return ' '.join(time)
 
-    units = [
-        UNITS['sec'],
-        UNITS['ms'],
-        UNITS['micro'],
-        UNITS['nano'],
-    ]
-
+    units = [UNITS[k] for k in ['sec', 'ms', 'micro', 'nano']]
     scaling = [1, 1e3, 1e6, 1e9]
 
     if timespan > 0.0:
@@ -56,29 +54,42 @@ def format_time(timespan):
     return '%.*g %s' % (3, timespan * scaling[order], units[order])
 
 
+def format_output(timespan, start_time, end_time=None, is_finished=False):
+    """Format output.
+
+    Args:
+        timespan (float): Time span.
+        start_time (time.struct_time): Start time.
+        end_time (time.struct_time, optional): End time.
+        is_finished (bool, optional): Is finished. Default to False.
+
+    Returns:
+        str: Output string.
+    """
+    timespan_str = format_timespan(timespan)
+    start_time_str = time.strftime(TIME_FORMAT, start_time)
+    if is_finished:
+        end_time_str = time.strftime(TIME_FORMAT, end_time)
+        return FINISHED_FORMAT.format(timespan=timespan_str,
+                                      start=start_time_str,
+                                      end=end_time_str)
+    else:
+        return RUNNING_FORMAT.format(timespan=timespan_str,
+                                     start=start_time_str)
+
+
 class Timer():
     """Timer."""
 
-    __slots__ = ['start_time', 'start_time_str', 'output', 'running', 'worker']
+    __slots__ = [
+        'start_monotonic',  # float
+        'start_time',  # time.struct_time
+        'output',  # IPython.core.display.DisplayHandle
+        'running',  # bool
+        'worker',  # threading.Thread
+    ]
 
-    TIME_FORMAT = '%Y-%m-%dT%H:%M:%S'
     UPDATE_DURATION = 0.11
-
-    def _get_now_str(self):
-        """Get current time string.
-
-        Returns:
-            str: Current time string.
-        """
-        return time.strftime(self.TIME_FORMAT, time.localtime())
-
-    def _get_formatted_delta(self):
-        """Get formatted time delta.
-
-        Returns:
-            str: Formatted time delta.
-        """
-        return format_time(time.monotonic() - self.start_time)
 
     def _update_output(self, text):
         """Update output.
@@ -91,11 +102,13 @@ class Timer():
     def _run_loop(self):
         """Run counter."""
         self.running = True
-        self.start_time_str = self._get_now_str()
-        self.start_time = time.monotonic()
+
+        self.start_time = time.localtime()
+        self.start_monotonic = time.monotonic()
         while self.running:
-            self._update_output('⌛ {} ({})'.format(self._get_formatted_delta(),
-                                                   self.start_time_str))
+            timespan = time.monotonic() - self.start_monotonic
+            output = format_output(timespan, self.start_time)
+            self._update_output(output)
             time.sleep(self.UPDATE_DURATION)
 
     def start(self):
@@ -106,16 +119,18 @@ class Timer():
 
     def stop(self):
         """Stop timer."""
-        delta_str = self._get_formatted_delta()
-        end_time_str = self._get_now_str()
+        timespan = time.monotonic() - self.start_monotonic
+        end_time = time.localtime()
         self.running = False
 
         while self.worker.is_alive():
             pass
 
-        self._update_output('✔️ {} ({}/{})'.format(delta_str,
-                                                   self.start_time_str,
-                                                   end_time_str))
+        output = format_output(timespan,
+                               self.start_time,
+                               end_time,
+                               is_finished=True)
+        self._update_output(output)
 
     def clear(self):
         """Clear timer."""
