@@ -32,10 +32,11 @@ flake8-comprehensions = "^3.3.0"
 flake8-eradicate = "^1.0.0"
 pep8-naming = "^0.11.1"
 mypy = "^0.790"
+jupyterlab = "^2.2.9"
 
+[tool.poetry.urls]
+issues = "https://github.com/takelushi/jupyter-autotime/issues"
 [build-system]
 requires = ["poetry>=0.12"]
 build-backend = "poetry.masonry.api"
 
-[tool.poetry.urls]
-issues = "https://github.com/takelushi/jupyter-autotime/issues"
