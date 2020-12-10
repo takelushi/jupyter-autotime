@@ -53,9 +53,7 @@ class Timer():
 
     def start(self):
         """Start timer."""
-        self.output = display(display_id=True)
-        if not LAB:
-            self.output.display(HTML('<pre></pre>'))
+        self.output = display(HTML('<pre></pre>'), display_id=True)
         self.worker = threading.Thread(target=self._run_loop)
         self.worker.start()
 
