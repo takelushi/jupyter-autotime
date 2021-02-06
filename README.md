@@ -109,6 +109,8 @@ Display elapsed time on Jupyter.
 ```sh
 poetry install
 
+poetry build
+
 poetry publish
 
 pip install --no-cache-dir --upgrade jupyter-autotime
